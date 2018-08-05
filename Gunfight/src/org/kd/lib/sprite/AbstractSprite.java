@@ -1,7 +1,8 @@
-package org.kd.sprite;
+package org.kd.lib.sprite;
 
 import javafx.geometry.Point2D;
 import javafx.scene.shape.Polygon;
+import org.kd.lib.general.Numbers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,12 +13,20 @@ abstract class AbstractSprite implements Sprite {
     protected short x;
     protected short y;
     private short singleStep = 3;
+    private final static double NO_LIMIT = -1;
     protected double[] xPoints;
     protected double[] yPoints;
+    protected Point2D topLeftMoveLimit;
+    protected Point2D bottomRightMoveLimit;
 
     public AbstractSprite(short x, short y) {
+        init(x, y);
+    }
+
+    private void init(short x, short y) {
         this.x = x;
         this.y = y;
+        setMoveLimits(new Point2D(0, 0), new Point2D(350, 512));
     }
 
     public AbstractSprite(short x, short y, double[] xPoints, double[] yPoints) {
@@ -30,21 +39,25 @@ abstract class AbstractSprite implements Sprite {
     @Override
     public void moveLeft() {
         this.x -= singleStep;
+        if (!isWithinBounds()) this.x += singleStep;
     }
 
     @Override
     public void moveRight() {
         this.x += singleStep;
+        if (!isWithinBounds()) this.x -= singleStep;
     }
 
     @Override
     public void moveUp() {
         this.y -= singleStep;
+        if (!isWithinBounds()) this.y += singleStep;
     }
 
     @Override
     public void moveDown() {
         this.y += singleStep;
+        if (!isWithinBounds()) this.y -= singleStep;
     }
 
     public Polygon getOutline() {
@@ -62,12 +75,25 @@ abstract class AbstractSprite implements Sprite {
             boolean collided = false;
         };
 
-        anotherSprite.getVertices().forEach(vertex -> {
+        for (Point2D vertex : anotherSprite.getVertices()) {
             if (this.getOutline().contains(vertex))
                 wrapper.collided = true;
-        });
+        }
 
         return wrapper.collided;
+    }
+
+    public void setMoveLimits(Point2D topLeft, Point2D bottomRight) {
+        this.topLeftMoveLimit = topLeft;
+        this.bottomRightMoveLimit = bottomRight;
+    }
+
+    public double computeWidth() {
+        return computeMaxX() - computeMinX();
+    }
+
+    public double computeHeight() {
+        return computeMaxY() - computeMinY();
     }
 
     @Override
@@ -120,5 +146,29 @@ abstract class AbstractSprite implements Sprite {
         List<Point2D> vertices = new ArrayList<>(this.xPoints.length);
         IntStream.range(0, this.xPoints.length).forEach(i -> vertices.add(new Point2D(xPoints[i], yPoints[i])));
         return vertices;
+    }
+
+    public double computeMinX() {
+        return Numbers.getMin(this.xPoints);
+    }
+
+    public double computeMaxX() {
+        return Numbers.getMax(this.xPoints);
+    }
+
+    public double computeMinY() {
+        return Numbers.getMin(this.yPoints);
+    }
+
+    public double computeMaxY() {
+        return Numbers.getMax(this.yPoints);
+    }
+
+    private boolean isWithinBounds() {
+        return
+                this.x >= topLeftMoveLimit.getX()
+                        && this.x + computeWidth() <= bottomRightMoveLimit.getX()
+                        && this.y >= topLeftMoveLimit.getY()
+                        && this.y + computeHeight() <= bottomRightMoveLimit.getY();
     }
 }

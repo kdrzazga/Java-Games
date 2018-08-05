@@ -1,4 +1,4 @@
-package org.kd.sprite;
+package org.kd.lib.sprite;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;

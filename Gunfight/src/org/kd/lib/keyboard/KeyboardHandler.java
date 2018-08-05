@@ -1,4 +1,4 @@
-package org.kd.keyboard;
+package org.kd.lib.keyboard;
 
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyEvent;

@@ -1,5 +1,6 @@
-package org.kd.sprite;
+package org.kd.lib.sprite;
 
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.Polygon;
 
@@ -34,4 +35,10 @@ public interface Sprite {
     double[] getYpoints();
 
     Polygon getOutline();
+
+    void setMoveLimits(Point2D topLeft, Point2D bottomRight);
+
+    double computeWidth();
+
+    double computeHeight();
 }
