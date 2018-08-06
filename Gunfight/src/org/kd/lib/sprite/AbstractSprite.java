@@ -16,8 +16,8 @@ abstract class AbstractSprite implements Sprite {
     private final static double NO_LIMIT = -1;
     protected double[] xPoints;
     protected double[] yPoints;
-    protected Point2D topLeftMoveLimit;
-    protected Point2D bottomRightMoveLimit;
+    private Point2D topLeftMoveLimit;
+    private Point2D bottomRightMoveLimit;
 
     public AbstractSprite(short x, short y) {
         init(x, y);
@@ -67,7 +67,6 @@ abstract class AbstractSprite implements Sprite {
             outline[2 * i + 1] = yPoints[i];
         }
         return new Polygon(outline);
-
     }
 
     boolean checkCollision(AbstractSprite anotherSprite) {

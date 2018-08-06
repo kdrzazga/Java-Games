@@ -8,10 +8,10 @@ import java.util.List;
 
 public class KeyboardHandler {
 
-    public EventHandler<KeyEvent> keyPressed;
-    public EventHandler<KeyEvent> keyReleased;
+    public final EventHandler<KeyEvent> keyPressed;
+    public final EventHandler<KeyEvent> keyReleased;
 
-    private List<String> input = new ArrayList<>();
+    private final List<String> input = new ArrayList<>();
 
     public KeyboardHandler() {
         keyPressed = new EventHandler<>() {

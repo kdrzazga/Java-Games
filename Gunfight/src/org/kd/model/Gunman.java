@@ -5,8 +5,6 @@ import org.kd.lib.sprite.SpriteMono;
 
 public class Gunman extends SpriteMono {
 
-    private static final byte SIZE = 20;
-
     public Gunman(short x, short y) {
         super(x, y, Color.WHITE);
 

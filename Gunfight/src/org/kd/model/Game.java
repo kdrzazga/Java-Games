@@ -2,6 +2,7 @@ package org.kd.model;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import org.kd.lib.background.Background;
 import org.kd.lib.keyboard.KeyboardHandler;
 
 public class Game {
@@ -9,15 +10,14 @@ public class Game {
     private final GraphicsContext gc;
     private final Gunman gunman;
     private final Target target;
-    private long startNanoTime;
+
     private final KeyboardHandler keyboardHandler;
-    private final short center = 232;
 
     public Game(GraphicsContext gc, Gunman gunman, KeyboardHandler keyboardHandler){
         this.gc = gc;
-        this.startNanoTime = System.nanoTime();
+
         this.gunman = gunman;
-        this.target = new Target((short)(center + 128), (short)(center + 128));
+        this.target = new Target((short)(400), (short)(400));
         this.keyboardHandler = keyboardHandler;
     }
 
@@ -40,17 +40,15 @@ public class Game {
     }
 
     private void clearCanvas() {
-        gc.setFill(Color.BLACK);
+        System.out.println(Background.getColor(gc.getCanvas(), 100, 100));
+        gc.setFill(Color.ROSYBROWN);
         gc.fillRect(0, 0, 512,512);
+
     }
 
     private void drawTarget(long now, GraphicsContext gc) {
-        double t = 2 * (now - startNanoTime) / 1000000000.0;
-
-        double x = center + 128;
-        double y = center + 128 * Math.sin(t);
-        gc.setFill(Color.BLUE);
-        gc.fillOval(x, y, 30, 30);
+        target.move(now);
+        target.draw(gc);
     }
 
 
